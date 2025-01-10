@@ -8,18 +8,17 @@ This project automates the process of changing the guest network password of a r
 
 1. **Automated Password Update**:
    - Generates a secure passkey using SHA-256 hashing.
-   - Logs into the router's admin panel and updates the guest network password.
-
-2. **Customizable Passkey Configuration**:
    - Adjustable passkey length and character set.
-   - Alternate character styles for added security.
+   - Alternate character styles for simplicity.
+   - Logs into the router's admin panel and updates the guest network password.
+   - Uses Selenium's headless mode for smooth automation without GUI.
 
 3. **Flask Server for Password Management**:
-   - Saves the new passkey securely.
+   - Saves the new passkey in the server.
    - Provides endpoints to retrieve and update the passkey.
+   - Homepage with autorefresh to show the latest password.
+   - You can host it anywhere.
 
-4. **Headless Operation**:
-   - Uses Selenium's headless mode for smooth automation without GUI.
 
 ## Installation
 
@@ -118,15 +117,15 @@ TITLE = "MY WIFI"                       # Web page title
 
 ## Screenshots
 
-Include screenshots of the Flask server's web interface and a snippet of the script's verbose output for better understanding.
-
----
+| Router page | Flask Server |
+|------------|-------------|
+| ![Router Page](README_IMAGES/ss2.png) | ![Flask Server](README_IMAGES/ss1.png) |
 
 ## Limitations
 
 - The script assumes specific router interface element IDs and classes, which may vary between router models.
 - The default router admin URL and credentials must be manually configured.
-- This repo is mainly focused for **TP-Link EC220-G5**
+- This repo is mainly focused for **TP-Link EC220-G5** Router.
 ---
 
 ## License
