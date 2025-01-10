@@ -12,6 +12,8 @@ This project automates the process of changing the guest network password of a r
    - Alternate character styles for simplicity.
    - Logs into the router's admin panel and updates the guest network password.
    - Uses Selenium's headless mode for smooth automation without GUI.
+   - use `single_run.py` for using only one time.
+   - use `multi_run.py` for running the script again & again after an **interval**.
 
 3. **Flask Server for Password Management**:
    - Saves the new passkey in the server.
@@ -36,7 +38,7 @@ This project automates the process of changing the guest network password of a r
 
 ### Script Configuration
 
-Edit the following variables in the script to match your router and server settings:
+Edit the following variables in the script to match your router and server settings in `single_run.py`:
 
 ```python
 router_login_page = 'http://192.168.0.1'  # Router login page URL
@@ -49,6 +51,17 @@ characters = '0123456789abcdefABCDEF'  # Passkey character set
 length = 8                             # Length of the passkey
 frequency = PasswordFrequency.MINUTE   # Passkey generation frequency
 password_styles = PasswordStyle.FOUR_ALTERNATE  # Passkey style
+```
+
+Edit the time interval for running the script repeatedly in `multi_run.py`
+
+```python
+time_period = 60 * 10 # 10 minutes
+# set the time_period to 60 * 60 for 1 hour
+# set the time_period to 60 * 60 * 24 for 1 day
+# set the time_period to 60 * 60 * 24 * 7 for 1 week
+# set the time_period to 60 * 60 * 24 * 30 for 1 month
+# set it as you like
 ```
 
 ---
@@ -72,9 +85,14 @@ TITLE = "MY WIFI"                       # Web page title
 1. Install the required Python libraries.
 2. Update the script configuration as described above.
 3. Run the script:
-
+   
+   For single run :
    ```bash
    python single_run.py
+   ```
+   For repeated runs :
+   ```bash
+   python multi_run.py
    ```
 
 ### Running the Flask Server
