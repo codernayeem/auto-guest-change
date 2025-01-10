@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Passkey Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+        <h1 class="text-2xl font-bold mb-4">{{title}}</h1>
+        <p class="text-lg text-gray-700 mb-4">Password</p>
+        
+        <div id="keyContainer">
+            <div class="flex items-center justify-center space-x-4">
+                <button id="copyButton" class="px-2 py-2 bg-green-200 text-white rounded hover:bg-green-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none">
+                        <path d="M17.5 14H19C20.1046 14 21 13.1046 21 12V5C21 3.89543 20.1046 3 19 3H12C10.8954 3 10 3.89543 10 5V6.5M5 10H12C13.1046 10 14 10.8954 14 12V19C14 20.1046 13.1046 21 12 21H5C3.89543 21 3 20.1046 3 19V12C3 10.8954 3.89543 10 5 10Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div id="passkey" class="text-3xl font-mono text-blue-500">
+                </div>
+            </div>
+        
+            <div class="mt-4 flex justify-center">
+                <img id="qrcode" alt="QR Code" class="w-48 h-48" />
+            </div>
+        </div>
+        
+        <div id="noKeyContainer" class="hidden">
+            <p class="text-lg text-gray-700 mb-4">No key set</p>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+    const keyDisplay = document.getElementById('passkey');
+    const keyDiv = document.getElementById('keyContainer');
+    const noKeyDiv = document.getElementById('noKeyContainer');
+
+    function updateKey(newkey){
+        const oldkey = keyDisplay.textContent;
+        if (newkey !== oldkey) {
+            if(newkey === ""){
+                keyDisplay.textContent = "";
+                keyDiv.classList.add('hidden');
+                noKeyDiv.classList.remove('hidden');
+            } else {
+                keyDisplay.textContent = newkey;
+                keyDiv.classList.remove('hidden');
+                noKeyDiv.classList.add('hidden');
+                QRCode.toDataURL(newkey, function (err, url) {
+                    if (!err) {
+                        document.getElementById('qrcode').src = url;
+                    }
+                });
+            }
+        }
+    }
+
+    function fetchKey() {
+        fetch('/get_key')
+            .then(response => response.json())
+            .then(data => {
+                if (data.key) {
+                    updateKey(data.key);
+                } else {
+                    updateKey("");
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching key:", err);
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // initail key
+        updateKey( "{{passkey}}" );
+        // fetch key every 5 seconds
+        setInterval(fetchKey, 5000);
+    });
+</script>
+
+</html>
